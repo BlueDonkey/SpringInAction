@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Taco cloud</title>
+    <title>Taco Cloud</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
 </head>
 <body>
-    <h1>Welcome to...</h1>
-    <img th:src="@{/images/realCommunism.png}">
+<h1>Welcome to...</h1>
+<img th:src="@{/images/taco.jpg}">
+<form method="POST" th:object="${design}">
+    <div class="grid">
+        <div class="ingredient-group" id="wraps">
+            <h3>Designate your wrap:</h3>
+            <div th:each="ingredient : ${wrap}">
+                <input name="ingredients" type="checkbox" th:value="${ingredient.id}"
+                />
+                <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+            </div>
+        </div>
+</form>
 </body>
 </html>
