@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import sia.tacocloud.HomeController;
 
 @RunWith(SpringRunner.class)
- @WebMvcTest(HomeController.class)
+@WebMvcTest(HomeController.class)
 public class HomeControllerTest {
 
     @Autowired
