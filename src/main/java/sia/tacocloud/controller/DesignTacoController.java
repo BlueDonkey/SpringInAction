@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import sia.tacocloud.Ingredient;
+import sia.tacocloud.data.impl.TacoRepository;
+import sia.tacocloud.domain.Order;
 import sia.tacocloud.domain.Taco;
-import sia.tacocloud.impl.IngredientRepository;
+import sia.tacocloud.data.impl.IngredientRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -22,13 +22,26 @@ import static sia.tacocloud.Ingredient.Type;
 @Slf4j
 @Controller
 @RequestMapping("/design")
+//
+@SessionAttributes("order")
 public class DesignTacoController {
-
+    private TacoRepository designRepo;
     private final IngredientRepository ingredientRepository;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository) {
+    public DesignTacoController(IngredientRepository ingredientRepository, TacoRepository designRepo) {
         this.ingredientRepository = ingredientRepository;
+        this.designRepo = designRepo;
+    }
+
+    @ModelAttribute(name = "order")
+    public Order order() {
+        return new Order();
+    }
+
+    @ModelAttribute(name = "taco")
+    public Taco taco() {
+        return new Taco();
     }
 
     @GetMapping
@@ -39,14 +52,19 @@ public class DesignTacoController {
         for (var type : types) {
             model.addAttribute(type.toString().toLowerCase(), filterListByType(ingredients, type));
         }
-        return null;
+        model.addAttribute("design", new Taco());
+        return "design";
     }
 
+    // @ModelAttribute indicates that this value should come from the model and that Spring MVC shouldn’t attempt to bind
+    // request parameters to it
     @PostMapping
-    public String processDesign(@Valid Taco design, Errors errors) {
+    public String processDesign(@Valid Taco design, Errors errors, @ModelAttribute Order order) {
         if (errors.hasErrors()) {
             return "design";
         }
+        Taco saved = designRepo.save(design);
+        order.addDesign(saved);
         log.info("Process data: " + design);
 //        System.out.println("Process data: " + taco);
         return "redirect:/orders/current";

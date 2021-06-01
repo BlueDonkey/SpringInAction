@@ -1,10 +1,10 @@
-package sia.tacocloud;
+package sia.tacocloud.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import sia.tacocloud.impl.IngredientRepository;
+import sia.tacocloud.Ingredient;
+import sia.tacocloud.data.impl.IngredientRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,21 +28,6 @@ public class JdbcIngredientRepository implements IngredientRepository {
         return jdbcTemplate.queryForObject("SELECT id, name, type from INGREDIENT WHHERE id = ?",
                 this::mapRowToIngredient, id);
     }
-
-//    @Override
-//    public Ingredient findOne(String id) {
-//        return jdbcTemplate.queryForObject("SELECT id, name, type from INGREDIENT WHHERE id = ?",
-//                new RowMapper<Ingredient>() {
-//                    @Override
-//                    public Ingredient mapRow(ResultSet rs, int rowNum) throws SQLException {
-//                        return new Ingredient(
-//                                rs.getString("id"),
-//                                rs.getString("name"),
-//                                Ingredient.Type.valueOf(rs.getString("type"))
-//                        );
-//                    }
-//                }, id);
-//    }
 
     @Override
     public Ingredient save(Ingredient ingredient) {

@@ -1,4 +1,4 @@
-package sia.tacocloud.impl;
+package sia.tacocloud.data.impl;
 
 import sia.tacocloud.Ingredient;
  
